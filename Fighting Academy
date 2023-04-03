@@ -1,0 +1,272 @@
+if not game:IsLoaded() then game.Loaded:Wait() end
+
+if game.PlaceId ~= 10512771459 then
+    game.Players.LocalPlayer:Kick("Wrong Game!")
+else
+    getgenv().AutoTools = false
+    getgenv().AutoTreadmills = false
+    getgenv().AutoBench = false
+    getgenv().AutoPullUps = false
+    getgenv().AutoBags = false
+    getgenv().AutoEat = false
+    getgenv().AutoBuy = false
+    getgenv().HitBoxExtender = false
+
+    local LocalPlayer, Character, HumanoidRootPart = game.Players.LocalPlayer, game.Players.LocalPlayer.Character, game.Players.LocalPlayer.Character.HumanoidRootPart
+    local ExtendedSize = 25
+
+    function AutoTools(SelectedTool)
+        coroutine.wrap(function()
+            while getgenv().AutoTools do task.wait()
+                for _,v in pairs(LocalPlayer.Backpack:GetChildren()) do
+                    if v.Name == SelectedTool then
+                        v.Parent = Character
+                    end
+                end
+                Character:FindFirstChild(SelectedTool):Activate()
+                if LocalPlayer.PlayerGui.status.PlayersStatus.StaminaBar.Bar.AbsoluteSize.X <= 30 then
+                    Character:FindFirstChild(SelectedTool).Parent = LocalPlayer.Backpack
+                    repeat task.wait() until LocalPlayer.PlayerGui.status.PlayersStatus.StaminaBar.Bar.AbsoluteSize.X >= 475 or getgenv().AutoTools ~= true
+                end
+                if getgenv().AutoTools ~= true then
+                    Character.Humanoid:UnequipTools()
+                end
+            end
+        end)()
+    end
+
+    function AutoTreadmills()
+        coroutine.wrap(function()
+            while getgenv().AutoTreadmills do task.wait()
+                for _,v in pairs(game:GetService("Workspace").GameMap["construções"].academy:GetChildren()) do
+                    if v.Name == "SpeedTraining" and v.PlayerUse.Value == nil then
+                        if v.Build.Part.Size == Vector3.new(6.145045280456543, 0.892728328704834, 2.3990862369537354) then
+                            HumanoidRootPart.CFrame = v.Build.Part.CFrame
+                            if LocalPlayer.PlayerGui:FindFirstChild("SpeedTraining") then
+                                for _,v in pairs(getconnections(LocalPlayer.PlayerGui.SpeedTraining.Button.MouseButton1Click)) do
+                                    v.Function()
+                                end
+                            end
+                        end
+                    end
+                end
+                if LocalPlayer.PlayerGui.status.PlayersStatus.StaminaBar.Bar.AbsoluteSize.X <= 45 then
+                    game.StarterGui:SetCore("SendNotification", {Title = "Stamina", Text = "Regenerating Stamina!", Duration = 3})
+                    repeat task.wait() until LocalPlayer.PlayerGui.status.PlayersStatus.StaminaBar.Bar.AbsoluteSize.X >= 475 or getgenv().AutoTreadmills ~= true
+                end
+            end
+        end)()
+    end
+
+    function AutoBench()
+        coroutine.wrap(function()
+            while getgenv().AutoBench do task.wait()
+                for _,v in pairs(game:GetService("Workspace").GameMap["construções"].academy:GetChildren()) do
+                    if v.Name == "Lifting Equipment" and v.PlayerUse.Value == nil then
+                        HumanoidRootPart.CFrame = v.Build.Union.CFrame
+                        if LocalPlayer.PlayerGui:FindFirstChild("SuppinTraining") then
+                            for _,v in pairs(getconnections(LocalPlayer.PlayerGui.SuppinTraining.Button.MouseButton1Click)) do
+                                v.Function()
+                            end
+                        end
+                    end
+                end
+                if LocalPlayer.PlayerGui.status.PlayersStatus.StaminaBar.Bar.AbsoluteSize.X <= 45 then
+                    game.StarterGui:SetCore("SendNotification", {Title = "Stamina", Text = "Regenerating Stamina!", Duration = 3.5})
+                    repeat task.wait() until LocalPlayer.PlayerGui.status.PlayersStatus.StaminaBar.Bar.AbsoluteSize.X >= 475 or getgenv().AutoBench ~= true
+                end
+            end
+        end)()
+    end
+
+    function AutoPullUps()
+        coroutine.wrap(function()
+            while getgenv().AutoPullUps do task.wait()
+                for _,v in pairs(game:GetService("Workspace").GameMap["construções"].academy:GetChildren()) do
+                    if v.Name == "barragym" and v.PlayerUse.Value == nil then
+                        HumanoidRootPart.CFrame = v.Seat.CFrame
+                        if LocalPlayer.PlayerGui:FindFirstChild("BarTraining") then
+                            for _,v in pairs(getconnections(LocalPlayer.PlayerGui.BarTraining.Button.MouseButton1Click)) do
+                                v.Function()
+                            end
+                        end
+                    end
+                end
+                if LocalPlayer.PlayerGui.status.PlayersStatus.StaminaBar.Bar.AbsoluteSize.X <= 100 then
+                    game.StarterGui:SetCore("SendNotification", {Title = "Stamina", Text = "Regenerating Stamina!", Duration = 3.5})
+                    repeat task.wait() until LocalPlayer.PlayerGui.status.PlayersStatus.StaminaBar.Bar.AbsoluteSize.X >= 475 or getgenv().AutoPullUps ~= true
+                end
+            end
+        end)()
+    end
+
+    function AutoBags()
+        coroutine.wrap(function()
+            while getgenv().AutoBags do task.wait()
+                for _,v in pairs(game:GetService("Workspace").GameMap["construções"].academy:GetChildren()) do
+                    if v.Name == "BoxingBag" then
+                        HumanoidRootPart.CFrame = v.Bag.CFrame + v.Bag.CFrame.LookVector * 3
+                        Character:SetPrimaryPartCFrame(CFrame.lookAt(HumanoidRootPart.Position, v.Bag.Position))
+                        if LocalPlayer.Backpack:FindFirstChild("Combat") then
+                            LocalPlayer.Backpack:FindFirstChild("Combat").Parent = Character
+                            repeat task.wait()
+                                Character:FindFirstChild("Combat"):Activate()
+                            until getgenv().AutoBags ~= true
+                        else
+                            repeat task.wait()
+                                Character:FindFirstChild("Combat"):Activate()
+                            until getgenv().AutoBags ~= true
+                        end
+                        break
+                    end
+                end
+            end
+        end)()
+    end
+
+    function AutoEat()
+        coroutine.wrap(function()
+            while getgenv().AutoEat do task.wait()
+                if LocalPlayer.PlayerGui.status.PlayersStatus.HungerBar.Bar.AbsoluteSize.X <= 210 then
+                    for _,v in pairs(LocalPlayer.Backpack:GetChildren()) do
+                        if v.Handle:FindFirstChild("eat") then
+                            v.Parent = Character
+                            task.wait(0.25)
+                            v:Activate()
+                        end
+                    end
+                end
+            end
+        end)()
+    end
+
+    function AutoBuy(FoodType)
+        coroutine.wrap(function()
+            while getgenv().AutoBuy do task.wait(0.35)
+                game:GetService("ReplicatedStorage"):WaitForChild("Functions"):WaitForChild("BuyItem"):InvokeServer(FoodType, LocalPlayer)
+            end
+        end)()
+    end
+
+    function HitBoxExtender()
+        while getgenv().HitBoxExtender do task.wait()
+            pcall(function()
+                for _,v in pairs(game:GetService("Players"):GetPlayers()) do
+                    if v ~= game.Players.LocalPlayer then 
+                        v.Character:FindFirstChild("PlayerBox").Size = Vector3.new(ExtendedSize, ExtendedSize, ExtendedSize)
+                        v.Character:FindFirstChild("PlayerBox").CanCollide = false
+                        v.Character:FindFirstChild("PlayerBox").Transparency = 0.9
+                    end
+                    if getgenv().HitBoxExtender ~= true then
+                        v.Character:FindFirstChild("PlayerBox").Size = Vector3.new(2.742000102996826, 5.5279998779296875, 2.3439998626708984)
+                        v.Character:FindFirstChild("PlayerBox").CanCollide = false
+                        v.Character:FindFirstChild("PlayerBox").Transparency = 1
+                    end
+                end
+            end)
+        end
+    end
+end
+
+
+
+local Luminosity = loadstring(game:HttpGet("https://raw.githubusercontent.com/iHavoc101/Genesis-Studios/main/UserInterface/Luminosity.lua", true))()
+local Window = Luminosity.new("Fighting Academy", "v1.0.0", 4370345701)
+local MainTab = Window.Tab("Farming", 6026568198)
+local SecondTab = Window.Tab("Misc", 6026568198)
+local Folder = MainTab.Folder("Auto Tools", "Automatically Train Tools!")
+SecondFolder = MainTab.Folder("Gym Exercises", "Automatically Train Gym Exercises!")
+local ThirdFolder = SecondTab.Folder("Auto Buy", "Automatically Purchases Items!")
+local FourthFolder = SecondTab.Folder("Auto Eat", "Automatically Eats Food When Hunger Is Low!")
+local FifthFolder = SecondTab.Folder("HitBox Extender!", "Extended HitBox!")
+
+Folder.Toggle("Auto Pushups", function(Status)
+    getgenv().AutoTools = Status
+    if Status then
+        AutoTools("Push up")
+    end
+end)
+
+Folder.Toggle("Auto Sit-Ups", function(Status)
+    getgenv().AutoTools = Status
+    if Status then
+        AutoTools("Sit Ups")
+    end
+end)
+
+Folder.Toggle("Auto Squats", function(Status)
+    getgenv().AutoTools = Status
+    if Status then
+        AutoTools("Squat")
+    end
+end)
+
+SecondFolder.Toggle("Auto Treadmills", function(Status)
+    getgenv().AutoTreadmills = Status
+    if Status then
+        AutoTreadmills()
+    end
+end)
+
+SecondFolder.Toggle("Auto Bench", function(Status)
+    getgenv().AutoBench = Status
+    if Status then
+        AutoBench()
+    end
+end)
+
+SecondFolder.Toggle("Auto Pull-Ups", function(Status)
+    getgenv().AutoPullUps = Status
+    if Status then
+        AutoPullUps()
+    end
+end)
+
+SecondFolder.Toggle("Auto Bags", function(Status)
+    getgenv().AutoBags = Status
+    if Status then
+        AutoBags()
+    end
+end)
+
+ThirdFolder.Toggle("Auto Buy Chicken", function(Status)
+    getgenv().AutoBuy = Status
+    if Status then
+        AutoBuy("chicken")
+    end
+end)
+
+ThirdFolder.Toggle("Auto Buy Soda", function(Status)
+    getgenv().AutoBuy = Status
+    if Status then
+        AutoBuy("soda")
+    end
+end)
+
+ThirdFolder.Toggle("Auto Buy Water", function(Status)
+    getgenv().AutoBuy = Status
+    if Status then
+        AutoBuy("water")
+    end
+end)
+
+ThirdFolder.Toggle("Auto Buy Medicine", function(Status)
+    getgenv().AutoBuy = Status
+    if Status then
+        AutoBuy("medicine")
+    end
+end)
+
+FourthFolder.Toggle("Auto Eat", function(Status)
+    getgenv().AutoEat = Status
+    if Status then
+        AutoEat()
+    end
+end)
+
+FifthFolder.Toggle("HitBox Extender", function(Status)
+    getgenv().HitBoxExtender = Status
+    if Status then
+        HitboxExtender()
+    end
+end)
